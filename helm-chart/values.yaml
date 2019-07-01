@@ -198,3 +198,43 @@ catalogService:
         internalPort: 8080
         name: catalog-service
         type: ClusterIP
+catalogServiceBlue:
+    container:
+        name: catalog-service
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 8080
+        internalPort: 8080
+        name: catalog-service-blue
+        type: ClusterIP
+catalogServiceGreen:
+    container:
+        name: catalog-service
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 8080
+        internalPort: 8080
+        name: catalog-service-green
+        type: ClusterIP
