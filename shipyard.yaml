@@ -1,0 +1,6 @@
+project: orders-project
+registry: orders-registry
+stages:
+    - {deployment_strategy: direct, name: dev, test_strategy: performance}
+    - {deployment_strategy: blue_green_service, name: staging, test_strategy: performance}
+    - {deployment_strategy: blue_green_service, name: production}
