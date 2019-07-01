@@ -78,3 +78,43 @@ customerService:
         internalPort: 8080
         name: customer-service
         type: ClusterIP
+customerServiceBlue:
+    container:
+        name: customer-service
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 8080
+        internalPort: 8080
+        name: customer-service-blue
+        type: ClusterIP
+customerServiceGreen:
+    container:
+        name: customer-service
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 8080
+        internalPort: 8080
+        name: customer-service-green
+        type: ClusterIP
