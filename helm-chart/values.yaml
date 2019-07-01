@@ -178,3 +178,23 @@ orderServiceGreen:
         internalPort: 8080
         name: order-service-green
         type: ClusterIP
+catalogService:
+    container:
+        name: catalog-service
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 8080
+        internalPort: 8080
+        name: catalog-service
+        type: ClusterIP
