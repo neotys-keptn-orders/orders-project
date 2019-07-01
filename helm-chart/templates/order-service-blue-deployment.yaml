@@ -1,0 +1,58 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: order-service-blue
+  labels:
+    app: {{ .Chart.Name }}-selector-order-service
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.orderServiceBlue.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-selector-order-service
+        deployment: order-service-blue
+    spec:
+      containers:
+      - name: {{ .Values.orderServiceBlue.container.name }}
+        image: "{{ .Values.orderServiceBlue.image.repository }}:{{ .Values.orderServiceBlue.image.tag }}"
+        imagePullPolicy: {{ .Values.orderServiceBlue.image.pullPolicy }}
+        env:
+        - name: DT_TAGS
+          value: "application={{ .Chart.Name }}"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.name"
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.namespace"
+        - name: DEPLOYMENT_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.labels['deployment']"
+        - name: CONTAINER_IMAGE
+          value: "{{ .Values.orderServiceBlue.image.repository }}:{{ .Values.orderServiceBlue.image.tag }}"
+        ports:
+        - name: internalport
+          containerPort: {{ .Values.orderServiceBlue.service.internalPort }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+
