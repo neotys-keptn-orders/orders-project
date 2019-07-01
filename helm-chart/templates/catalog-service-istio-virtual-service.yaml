@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: orders-project-staging-catalog-service
+spec:
+  hosts:
+  - "catalog-service.orders-project-staging.35.246.100.192.xip.io"
+  gateways:
+  - orders-project-staging-gateway
+  http:
+    - route:
+      - destination:
+          host: catalog-service.orders-project-staging.svc.cluster.local
+          subset: blue
+        weight: 0
+      - destination:
+          host: catalog-service.orders-project-staging.svc.cluster.local
+          subset: green
+        weight: 100
