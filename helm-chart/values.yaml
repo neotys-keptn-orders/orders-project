@@ -18,3 +18,43 @@ frontEnd:
         internalPort: 80
         name: front-end
         type: ClusterIP
+frontEndBlue:
+    container:
+        name: front-end
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 80
+        internalPort: 80
+        name: front-end-blue
+        type: ClusterIP
+frontEndGreen:
+    container:
+        name: front-end
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 80
+        internalPort: 80
+        name: front-end-green
+        type: ClusterIP
