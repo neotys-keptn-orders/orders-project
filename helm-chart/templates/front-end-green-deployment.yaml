@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: front-end-green
+  labels:
+    app: {{ .Chart.Name }}-selector-front-end
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.frontEndGreen.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-selector-front-end
+        deployment: front-end-green
+    spec:
+      containers:
+      - name: {{ .Values.frontEndGreen.container.name }}
+        image: "{{ .Values.frontEndGreen.image.repository }}:{{ .Values.frontEndGreen.image.tag }}"
+        imagePullPolicy: {{ .Values.frontEndGreen.image.pullPolicy }}
+        env:
+        - name: DT_TAGS
+          value: "application={{ .Chart.Name }}"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.name"
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.namespace"
+        - name: DEPLOYMENT_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.labels['deployment']"
+        - name: CONTAINER_IMAGE
+          value: "{{ .Values.frontEndGreen.image.repository }}:{{ .Values.frontEndGreen.image.tag }}"
+        ports:
+        - name: internalport
+          containerPort: {{ .Values.frontEndGreen.service.internalPort }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
