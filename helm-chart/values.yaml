@@ -118,3 +118,23 @@ customerServiceGreen:
         internalPort: 8080
         name: customer-service-green
         type: ClusterIP
+orderService:
+    container:
+        name: order-service
+    image:
+        pullPolicy: IfNotPresent
+        repository: null
+        tag: null
+    replicaCount: 1
+    resources:
+        limits:
+            cpu: 100m
+            memory: 128Mi
+        requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+        externalPort: 8080
+        internalPort: 8080
+        name: order-service
+        type: ClusterIP
