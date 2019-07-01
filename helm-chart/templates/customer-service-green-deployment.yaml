@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: customer-service-green
+  labels:
+    app: {{ .Chart.Name }}-selector-customer-service
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.customerServiceGreen.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-selector-customer-service
+        deployment: customer-service-green
+    spec:
+      containers:
+      - name: {{ .Values.customerServiceGreen.container.name }}
+        image: "{{ .Values.customerServiceGreen.image.repository }}:{{ .Values.customerServiceGreen.image.tag }}"
+        imagePullPolicy: {{ .Values.customerServiceGreen.image.pullPolicy }}
+        env:
+        - name: DT_TAGS
+          value: "application={{ .Chart.Name }}"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.name"
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.namespace"
+        - name: DEPLOYMENT_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.labels['deployment']"
+        - name: CONTAINER_IMAGE
+          value: "{{ .Values.customerServiceGreen.image.repository }}:{{ .Values.customerServiceGreen.image.tag }}"
+        ports:
+        - name: internalport
+          containerPort: {{ .Values.customerServiceGreen.service.internalPort }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
